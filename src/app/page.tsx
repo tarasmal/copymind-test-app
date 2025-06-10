@@ -1,13 +1,11 @@
-import ProtectedRoute from "@/shared/ui/ProtectedRoute";
+import ProtectedRoute from '@/shared/ui/ProtectedRoute';
 
 export default function Home() {
   return (
-      <ProtectedRoute>
-          <div
-              className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-              there will be content
-          </div>
-      </ProtectedRoute>
-
+    <ProtectedRoute>
+      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        there will be content
+      </div>
+    </ProtectedRoute>
   );
 }

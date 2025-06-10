@@ -1,4 +1,5 @@
 export enum ROUTES {
-    HOME = "/",
-    LOGIN = "/login",
+  HOME = '/',
+  LOGIN = '/login',
+  DECISION_NEW = '/decision/new',
 }
