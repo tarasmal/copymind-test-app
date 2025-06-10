@@ -15,7 +15,12 @@ export const decisionSchema = yup.object({
     .string()
     .transform((value) => (value == null ? '' : value))
     .notRequired()
-    .matches(TEXT_REGEX, 'Only text is allowed (no numbers or special symbols)')
+    .test(
+      'is-text-or-empty',
+      'Only text is allowed (no numbers or special symbols)',
+      (value) => !value || TEXT_REGEX.test(value),
+    )
+    .nullable()
     .default(''),
 });
 
