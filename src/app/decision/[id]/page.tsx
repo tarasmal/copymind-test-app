@@ -6,6 +6,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/shared/lib/firebase';
 import { Decision } from '@/features/decisions/types/decision';
 import Spinner from '@/shared/ui/Spinner';
+import ErrorMessage from '@/shared/ui/ErrorMessage';
 
 export default function DecisionDetailsPage() {
   const { id } = useParams() as { id: string };
@@ -94,9 +95,7 @@ export default function DecisionDetailsPage() {
         </div>
       )}
 
-      {decision.llmError && (
-        <div className="text-red-500 mb-4">Model error: {decision.llmError}</div>
-      )}
+      {decision.llmError && <ErrorMessage error={decision.llmError} />}
     </div>
   );
 }

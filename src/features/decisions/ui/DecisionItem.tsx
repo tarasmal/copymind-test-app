@@ -1,6 +1,7 @@
 import { Decision, DecisionStatus } from '../types/decision';
 import Spinner from '@/shared/ui/Spinner';
 import Link from 'next/link';
+import ErrorMessage from '@/shared/ui/ErrorMessage';
 
 type Props = { decision: Decision };
 
@@ -20,9 +21,11 @@ export default function DecisionItem({ decision }: Props) {
         href={`/decision/${decision.id}`}
         className="block hover:bg-gray-100 rounded p-4 transition"
       >
-        <div className="font-bold">{situation}</div>
-        <div className="text-sm text-gray-700">{text}</div>
-        {reasoning && <div className="text-xs text-gray-500">Reasoning: {reasoning}</div>}
+        <div className="font-bold line-clamp-1">{situation}</div>
+        <div className="text-sm text-gray-700 line-clamp-1">{text}</div>
+        {reasoning && (
+          <div className="text-xs text-gray-500 line-clamp-2">Reasoning: {reasoning}</div>
+        )}
 
         <div className="flex items-center gap-2 text-xs">
           <span
@@ -36,9 +39,7 @@ export default function DecisionItem({ decision }: Props) {
           </span>
         </div>
 
-        {llmError && (
-          <div className="text-xs text-red-600 bg-red-50 rounded px-2 py-1 mt-1">{llmError}</div>
-        )}
+        {llmError && <ErrorMessage error={llmError} />}
       </Link>
     </li>
   );
