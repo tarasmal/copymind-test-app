@@ -1,11 +1,12 @@
 import DecisionItem from './DecisionItem';
 import { Decision } from '@/features/decisions/types/decision';
 import { usePaginatedDecisions } from '@/features/decisions/hooks/usePaginatedDecisions';
+import LoadingScreen from '@/shared/ui/LoadingScreen';
 
 export default function DecisionList() {
   const { items, loading, hasMore, loadMore } = usePaginatedDecisions();
 
-  if (!items.length && loading) return <div>Loading...</div>;
+  if (!items.length && loading) return <LoadingScreen />;
   if (!items.length) return <div>No decisions found.</div>;
 
   return (
