@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/features/auth/model/useAuth';
 import { useUserProfile } from '../model/useUserProfile';
+import Image from 'next/image';
 
 export default function UserInfo() {
   const { user } = useAuth();
@@ -10,7 +11,7 @@ export default function UserInfo() {
 
   return (
     <div className="flex items-center gap-2">
-      <img src={profile.photoURL} alt="avatar" className="w-8 h-8 rounded-full border" />
+      <Image src={profile.photoURL} alt="avatar" className="w-8 h-8 rounded-full border" />
       <span className="font-medium">{profile.displayName}</span>
     </div>
   );

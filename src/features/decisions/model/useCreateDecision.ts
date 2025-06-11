@@ -15,7 +15,7 @@ export function useCreateDecision() {
       await addNewDecision(input);
       setSuccess(true);
       return true;
-    } catch (e) {
+    } catch (e: unknown) {
       setError('Something went wrong. Please try again.');
       return false;
     } finally {
