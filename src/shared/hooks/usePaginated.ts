@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
+import { DocumentData } from 'firebase/firestore';
 
 type PaginatedResult<T> = {
   items: T[];
-  lastDoc: any;
+  lastDoc: DocumentData;
   hasMore: boolean;
 };
 
-type FetchPage<T> = (params: { lastDoc?: any; userId: string }) => Promise<PaginatedResult<T>>;
+type FetchPage<T> = (params: {
+  lastDoc?: DocumentData;
+  userId: string;
+}) => Promise<PaginatedResult<T>>;
 
 export function usePaginated<T>(fetchPage: FetchPage<T>, userId: string | undefined) {
   const [items, setItems] = useState<T[]>([]);

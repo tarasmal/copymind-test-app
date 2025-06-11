@@ -23,6 +23,7 @@ export async function addNewDecision(input: DecisionFormData) {
     status: DecisionStatus.PROCESSING,
     llmResult: null,
     createdAt: serverTimestamp(),
+    reasoning: input.reasoning ?? null,
   });
   const ref = await addDecisionRaw(firestoreObj);
   await updateDoc(ref, { id: ref.id });

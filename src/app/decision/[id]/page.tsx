@@ -28,6 +28,7 @@ export default function DecisionDetailsPage() {
         }
         setDecision({ id: snap.id, ...snap.data() } as Decision);
       } catch (e: unknown) {
+        console.error(e);
         setError('Failed to fetch decision');
       } finally {
         setLoading(false);
