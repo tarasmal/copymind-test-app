@@ -23,6 +23,7 @@ export function useDecision(id: string) {
         }
         if (!cancelled) setDecision({ id: snap.id, ...snap.data() } as Decision);
       } catch (e) {
+        console.error(e);
         if (!cancelled) setError('Failed to fetch decision');
       } finally {
         if (!cancelled) setLoading(false);
