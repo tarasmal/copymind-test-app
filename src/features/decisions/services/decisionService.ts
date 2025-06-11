@@ -1,5 +1,5 @@
-import { QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
-import { auth } from '@/shared/lib/firebase';
+import { QueryDocumentSnapshot, DocumentData, updateDoc, doc } from 'firebase/firestore';
+import { auth, db } from '@/shared/lib/firebase';
 import { DecisionFormData } from '@/features/decisions/model/decisionValidation';
 import { Decision, DECISIONS_PER_PAGE, DecisionStatus } from '@/features/decisions/types/decision';
 import {
@@ -11,6 +11,7 @@ import {
   getDecisionsPageRaw,
 } from '@/features/decisions/repository/decisionsRepository';
 import { serverTimestamp } from '@firebase/database';
+import { analyzeDecision } from '@/shared/services/llmService';
 
 export async function addNewDecision(input: DecisionFormData) {
   const user = auth.currentUser;
@@ -23,8 +24,9 @@ export async function addNewDecision(input: DecisionFormData) {
     llmResult: null,
     createdAt: serverTimestamp(),
   });
-
-  await addDecisionRaw(firestoreObj);
+  const ref = await addDecisionRaw(firestoreObj);
+  await updateDoc(ref, { id: ref.id });
+  analyzeAndUpdateDecision(ref.id, input);
 }
 
 export async function fetchDecisionsPage({
@@ -43,4 +45,19 @@ export async function fetchDecisionsPage({
     lastDoc: snap.docs[snap.docs.length - 1] as QueryDocumentSnapshot<DocumentData> | undefined,
     hasMore: snap.size === DECISIONS_PER_PAGE,
   };
+}
+
+export async function analyzeAndUpdateDecision(id: string, input: DecisionFormData) {
+  try {
+    const llmResult = await analyzeDecision(input);
+    await updateDoc(doc(db, 'decisions', id), {
+      llmResult,
+      status: DecisionStatus.COMPLETED,
+    });
+  } catch (e: any) {
+    await updateDoc(doc(db, 'decisions', id), {
+      status: DecisionStatus.ERROR,
+      llmError: String(e),
+    });
+  }
 }

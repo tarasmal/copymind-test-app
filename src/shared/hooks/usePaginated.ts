@@ -31,5 +31,5 @@ export function usePaginated<T>(fetchPage: FetchPage<T>, userId: string | undefi
     if (userId) loadMore();
   }, [userId]);
 
-  return { items, loading, hasMore, loadMore };
+  return { items, loading, hasMore, loadMore, setItems };
 }
