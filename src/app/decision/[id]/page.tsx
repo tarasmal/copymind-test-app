@@ -1,41 +1,13 @@
 'use client';
-
-import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/shared/lib/firebase';
-import { Decision } from '@/features/decisions/types/decision';
 import ErrorMessage from '@/shared/ui/ErrorMessage';
 import LoadingScreen from '@/shared/ui/LoadingScreen';
 import ProtectedRoute from '@/shared/ui/ProtectedRoute';
+import { useDecision } from '@/features/decisions/hooks/useDecision';
 
 export default function DecisionDetailsPage() {
   const { id } = useParams() as { id: string };
-  const [decision, setDecision] = useState<Decision | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchDecision() {
-      try {
-        setLoading(true);
-        setError(null);
-        const snap = await getDoc(doc(db, 'decisions', id));
-        if (!snap.exists()) {
-          setError('Decision not found.');
-          setLoading(false);
-          return;
-        }
-        setDecision({ id: snap.id, ...snap.data() } as Decision);
-      } catch (e: unknown) {
-        console.error(e);
-        setError('Failed to fetch decision');
-      } finally {
-        setLoading(false);
-      }
-    }
-    if (id) fetchDecision();
-  }, [id]);
+  const { loading, error, decision } = useDecision(id);
 
   if (loading) return <LoadingScreen />;
   if (error) return <div className="text-red-500">{error}</div>;
@@ -74,7 +46,6 @@ export default function DecisionDetailsPage() {
           </span>
         </div>
 
-        {/* Результат моделі */}
         {decision.llmResult && (
           <div className="mb-4">
             <h2 className="font-semibold mb-2">Model analysis:</h2>
