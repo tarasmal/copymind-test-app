@@ -1,5 +1,5 @@
 'use client';
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { decisionSchema, DecisionFormData } from '@/features/decisions/model/decisionValidation';
 import FormTextArea from '@/shared/ui/FormTextArea';
@@ -18,7 +18,7 @@ export default function DecisionForm({ onSubmitAction, loading, success, error }
     formState: { errors, isValid },
     reset,
   } = useForm<DecisionFormData>({
-    resolver: yupResolver(decisionSchema),
+    resolver: yupResolver(decisionSchema) as Resolver<DecisionFormData, any, DecisionFormData>,
     mode: 'onChange',
     defaultValues: {
       situation: '',
