@@ -16,6 +16,7 @@ export function useCreateDecision() {
       setSuccess(true);
       return true;
     } catch (e: unknown) {
+      console.error(e);
       setError('Something went wrong. Please try again.');
       return false;
     } finally {

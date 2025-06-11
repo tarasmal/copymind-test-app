@@ -34,7 +34,7 @@ export async function fetchDecisionsPage({
   lastDoc,
   userId,
 }: {
-  lastDoc?: QueryDocumentSnapshot<DocumentData>;
+  lastDoc?: QueryDocumentSnapshot<DocumentData, DocumentData>;
   userId: string;
 }) {
   const snap = await getDecisionsPageRaw({ userId, lastDoc });
@@ -43,7 +43,9 @@ export async function fetchDecisionsPage({
 
   return {
     items,
-    lastDoc: snap.docs[snap.docs.length - 1] as QueryDocumentSnapshot<DocumentData> | undefined,
+    lastDoc: snap.docs[snap.docs.length - 1] as
+      | QueryDocumentSnapshot<DocumentData, DocumentData>
+      | undefined,
     hasMore: snap.size === DECISIONS_PER_PAGE,
   };
 }

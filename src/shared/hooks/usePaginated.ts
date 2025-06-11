@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
-import { DocumentData } from 'firebase/firestore';
+import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 
 type PaginatedResult<T> = {
   items: T[];
-  lastDoc: DocumentData;
+  lastDoc: QueryDocumentSnapshot<DocumentData, DocumentData> | undefined;
   hasMore: boolean;
 };
 
 type FetchPage<T> = (params: {
-  lastDoc?: DocumentData;
+  lastDoc?: QueryDocumentSnapshot<DocumentData, DocumentData> | undefined;
   userId: string;
 }) => Promise<PaginatedResult<T>>;
 
 export function usePaginated<T>(fetchPage: FetchPage<T>, userId: string | undefined) {
   const [items, setItems] = useState<T[]>([]);
-  const [lastDoc, setLastDoc] = useState<any>(null);
+  const [lastDoc, setLastDoc] = useState<
+    QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
+  >(undefined);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -30,7 +32,7 @@ export function usePaginated<T>(fetchPage: FetchPage<T>, userId: string | undefi
 
   useEffect(() => {
     setItems([]);
-    setLastDoc(null);
+    setLastDoc(undefined);
     setHasMore(true);
     if (userId) loadMore();
   }, [userId]);
